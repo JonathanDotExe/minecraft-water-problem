@@ -1,0 +1,10 @@
+name: WaterSatSolver
+main: at.jku.complexity.watersolver
+version: 0.1
+author: JonathanDotExe
+load: STARTUP
+api-version: 1.21
+commands: 
+  generatecnf:
+    description: Creates a water problem machine for the given cnf
+    usage: /generatecnf <cnf>
