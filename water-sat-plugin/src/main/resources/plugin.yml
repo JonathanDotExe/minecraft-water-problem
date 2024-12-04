@@ -1,5 +1,5 @@
 name: WaterSatSolver
-main: at.jku.complexity.watersolver
+main: at.jku.complexity.watersatsolver.WaterSatSolverPlugin
 version: 0.1
 author: JonathanDotExe
 load: STARTUP

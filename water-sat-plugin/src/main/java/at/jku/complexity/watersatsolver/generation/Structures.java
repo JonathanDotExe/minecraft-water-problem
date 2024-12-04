@@ -23,21 +23,21 @@ public final class Structures {
 	}
 	
 	public static void registerStructures() throws IOException {
-		splitter = Bukkit.getStructureManager().loadStructure(Structures.class.getResourceAsStream(SPLITTER + ".nbt"));
-		clause = Bukkit.getStructureManager().loadStructure(Structures.class.getResourceAsStream(CLAUSE + ".nbt"));
-		variable = Bukkit.getStructureManager().loadStructure(Structures.class.getResourceAsStream(VARIABLE + ".nbt"));
+		splitter = Bukkit.getStructureManager().loadStructure(Structures.class.getResourceAsStream("/" + SPLITTER + ".nbt"));
+		clause = Bukkit.getStructureManager().loadStructure(Structures.class.getResourceAsStream("/" + CLAUSE + ".nbt"));
+		variable = Bukkit.getStructureManager().loadStructure(Structures.class.getResourceAsStream("/" + VARIABLE + ".nbt"));
 	}
 	
 	public static void placeSplitter(Location loc) {
-		splitter.place(loc, false, StructureRotation.NONE, Mirror.NONE, 0, 0, new Random());
+		splitter.place(loc, false, StructureRotation.NONE, Mirror.NONE, 0, 1, new Random());
 	}
 	
 	public static void placeClause(Location loc) {
-		clause.place(loc, false, StructureRotation.NONE, Mirror.NONE, 0, 0, new Random());
+		clause.place(loc, false, StructureRotation.NONE, Mirror.NONE, 0, 1, new Random());
 	}
 	
 	public static void placeVariable(Location loc) {
-		variable.place(loc, false, StructureRotation.NONE, Mirror.NONE, 0, 0, new Random());
+		variable.place(loc, false, StructureRotation.NONE, Mirror.NONE, 0, 1, new Random());
 	}
 
 	public static Structure getSplitter() {
