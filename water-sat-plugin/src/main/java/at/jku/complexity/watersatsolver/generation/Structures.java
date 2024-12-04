@@ -1,4 +1,4 @@
-package at.jku.complexity.watersatsolver;
+package at.jku.complexity.watersatsolver.generation;
 
 import java.io.IOException;
 

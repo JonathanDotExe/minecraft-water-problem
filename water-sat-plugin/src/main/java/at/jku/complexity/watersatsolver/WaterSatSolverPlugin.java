@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import at.jku.complexity.watersatsolver.generation.Structures;
+
 
 public class WaterSatSolverPlugin extends JavaPlugin {
 
