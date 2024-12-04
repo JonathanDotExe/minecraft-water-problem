@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import at.jku.complexity.watersatsolver.cnf.BuilderLiteral;
 import at.jku.complexity.watersatsolver.cnf.CNF;
 import at.jku.complexity.watersatsolver.cnf.CNFBuilder;
+import at.jku.complexity.watersatsolver.generation.CNFWaterBuilder;
 
 public class GenerateCNFCommand implements CommandExecutor {
 
@@ -18,7 +19,7 @@ public class GenerateCNFCommand implements CommandExecutor {
 		if (label.equalsIgnoreCase(COMMAND_NAME)) {
 			if (sender.isOp() && sender instanceof Player) {
 				if (args.length >= 1) {
-					String input = args[0];
+					//String input = args[0];
 					//TODO parse cnf
 					CNFBuilder builder = new CNFBuilder();
 					builder.addClause(new BuilderLiteral("x", false), new BuilderLiteral("y", false), new BuilderLiteral("z", false));
@@ -26,7 +27,7 @@ public class GenerateCNFCommand implements CommandExecutor {
 					builder.addClause(new BuilderLiteral("x", false), new BuilderLiteral("y", false), new BuilderLiteral("z", true));
 					CNF cnf = builder.build();
 					
-					
+					CNFWaterBuilder.build(((Player) sender).getLocation(), cnf, true, true, true);	
 				}
 				else {
 					return false;
