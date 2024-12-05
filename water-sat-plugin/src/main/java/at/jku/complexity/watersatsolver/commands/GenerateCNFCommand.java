@@ -27,7 +27,7 @@ public class GenerateCNFCommand implements CommandExecutor {
 					builder.addClause(new BuilderLiteral("x", false), new BuilderLiteral("y", false), new BuilderLiteral("z", true));
 					CNF cnf = builder.build();
 					
-					CNFWaterBuilder.build(((Player) sender).getLocation(), cnf, true, true, true);
+					CNFWaterBuilder.build(((Player) sender).getLocation(), cnf, true, true, false);
 					return true;
 				}
 				else {
