@@ -1,12 +1,13 @@
 package at.jku.complexity.watersatsolver.generation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
+import org.bukkit.util.BlockVector;
 
 import at.jku.complexity.watersatsolver.cnf.CNF;
 import at.jku.complexity.watersatsolver.cnf.Clause;
@@ -15,20 +16,28 @@ import at.jku.complexity.watersatsolver.cnf.Literal;
 public class CNFWaterBuilder {
 	
 	
-	public static void build(Location place, CNF cnf, boolean... assignment) {
-		//TODO add height first
+	public static CNFWaterMachine build(Location place, CNF cnf) {
+		int width = (Structures.getVariable().getSize().getBlockX() - 1) * cnf.getVariables().length + 1;
+		int length = Structures.getVariable().getSize().getBlockZ() + Structures.getSplitter().getSize().getBlockZ() * cnf.getClauses().size();
+		int height = Structures.getVariable().getSize().getBlockY() + cnf.getClauses().size() + cnf.getVariables().length;
+
+		Location start = place.clone();
 		place = place.clone();
+		place.add(0, height, 0);
+		
 		int startX = place.getBlockX();
-		List<Location> waterLocs = new ArrayList<>();
+		Location[] variableLocs = new Location[cnf.getVariables().length];
+		Set<Location> waterLocs = new HashSet<>();
+		Set<Location> sandLocs = new HashSet<>();
 		//Place variables
 		for (int i = 0; i < cnf.getVariables().length; i++) {
 			Structures.placeVariable(place);
 			//Assignment water
-			if (assignment[i]) {
-				waterLocs.add(place.clone().add(1, 3, 2));
-			}
+			variableLocs[i] = place.clone().add(1, 3, 2);
 			//Negation water
 			waterLocs.add(place.clone().add(4, 1, 1));
+			//Sand
+			sandLocs.add(place.clone().add(4, 3, 2));
 			//Sign
 			Location signPlace = place.clone().add(1, Structures.getVariable().getSize().getY(), 1);
 			signPlace.getBlock().setType(Material.OAK_SIGN);
@@ -40,6 +49,7 @@ public class CNFWaterBuilder {
 		}
 
 		place.add(0, -1, Structures.getVariable().getSize().getZ());
+		Set<LiteralBlock> literals = new HashSet<>();
 		//Clauses
 		for (Clause clause : cnf.getClauses()) {
 			place.setX(startX);
@@ -47,13 +57,15 @@ public class CNFWaterBuilder {
 			//Splitters
 			for (int i = 0; i < cnf.getVariables().length; i++) {
 				Structures.placeSplitter(place);
+				final Literal l = new Literal(i, false);
+				final Literal nl = new Literal(i, true);
 				//Positive
-				if (clause.getLiterals().contains(new Literal(i, false))) {
-					place.clone().add(2, 2, 0).getBlock().setType(Material.AIR);
+				if (clause.getLiterals().contains(l)) {
+					literals.add(new LiteralBlock(place.clone().add(2, 2, 0), l));
 				}
 				//Negative
-				if (clause.getLiterals().contains(new Literal(i, true))) {
-					place.clone().add(3, 2, 0).getBlock().setType(Material.AIR);
+				if (clause.getLiterals().contains(nl)) {
+					literals.add(new LiteralBlock(place.clone().add(3, 2, 0), nl));
 				}
 				
 				place.add(Structures.getSplitter().getSize().getX() - 1, 0, 0);
@@ -73,11 +85,7 @@ public class CNFWaterBuilder {
 			place.add(0, -1, Structures.getSplitter().getSize().getZ() + 1);
 		}
 		
-		//Place water
-		for (Location p : waterLocs) {
-			p.getBlock().setType(Material.WATER);
-		}
-		
+		return new CNFWaterMachine(start, new BlockVector(width, height, length), variableLocs, waterLocs, sandLocs, literals, 5 * (width + height + length));
 	}
 
 }

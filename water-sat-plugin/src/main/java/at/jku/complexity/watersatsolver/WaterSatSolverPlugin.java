@@ -21,7 +21,7 @@ public class WaterSatSolverPlugin extends JavaPlugin {
 		}
 		
 		//Commands
-		getCommand(GenerateCNFCommand.COMMAND_NAME).setExecutor(new GenerateCNFCommand());
+		getCommand(GenerateCNFCommand.COMMAND_NAME).setExecutor(new GenerateCNFCommand(this));
 	}
 	
 }
