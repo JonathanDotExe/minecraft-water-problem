@@ -35,6 +35,23 @@ public class CNFWaterMachine {
 	}
 
 	public void assign(boolean... assignment) {
+		//Clear water
+		for (int x = 0; x < size.getBlockX(); x++) {
+			for (int y = 0; y < size.getBlockY(); y++) {
+				for (int z = 0; z < size.getBlockZ(); z++) {
+					Block block = location.getBlock().getRelative(x, y, z);
+					if (block.getType() == Material.WATER) {
+						block.setType(Material.AIR);
+					}
+				}
+			}
+		}
+		//Sand
+		for (Location location : sandLocations) {
+			location.clone().add(0, -2, 0).getBlock().setType(Material.AIR, false);
+			location.clone().add(0, -1, 0).getBlock().setType(Material.TRIPWIRE, false);
+			location.getBlock().setType(Material.SAND, false);
+		}
 		//Variables
 		for (int i = 0; i < variableWaterLocations.length; i++) {
 			variableWaterLocations[i].getBlock().setType(assignment[i] ? Material.WATER : Material.AIR);
@@ -42,12 +59,6 @@ public class CNFWaterMachine {
 		//Fixed water
 		for (Location location : fixedWaterLocations) {
 			location.getBlock().setType(Material.WATER);
-		}
-		//Sand
-		for (Location location : sandLocations) {
-			location.clone().add(0, -2, 0).getBlock().setType(Material.AIR, false);
-			location.clone().add(0, -1, 0).getBlock().setType(Material.TRIPWIRE, false);
-			location.getBlock().setType(Material.SAND, false);
 		}
 		//Literals
 		for (LiteralBlock l : literals) {

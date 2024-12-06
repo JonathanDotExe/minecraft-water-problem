@@ -1,6 +1,5 @@
 package at.jku.complexity.watersatsolver.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,11 +39,10 @@ public class GenerateCNFCommand implements CommandExecutor {
 					CNFWaterMachine machine =  CNFWaterBuilder.build(((Player) sender).getLocation(), cnf);
 					machine.assign(true, true, false);
 					
-					//Display result
-					Bukkit.getScheduler().runTaskLater(plugin, () -> {
-						boolean sat = machine.checkSAT();
-						sender.sendMessage(sat ? "The assignment is satisfying!" : "The assignment is not satisfying");
-					}, machine.getTicksTillFinished());
+					//Assignments
+					RunningCNF run = new RunningCNF(cnf, machine);
+					run.start(plugin, sender);
+							
 					return true;
 				}
 				else {
@@ -57,5 +55,5 @@ public class GenerateCNFCommand implements CommandExecutor {
 		}
 		return false;
 	}
-
+	
 }
