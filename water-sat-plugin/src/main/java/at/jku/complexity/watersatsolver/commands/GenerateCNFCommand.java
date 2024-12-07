@@ -6,9 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import at.jku.complexity.watersatsolver.cnf.BuilderLiteral;
 import at.jku.complexity.watersatsolver.cnf.CNF;
-import at.jku.complexity.watersatsolver.cnf.CNFBuilder;
+import at.jku.complexity.watersatsolver.cnf.CNFParser;
 import at.jku.complexity.watersatsolver.generation.CNFWaterBuilder;
 import at.jku.complexity.watersatsolver.generation.CNFWaterMachine;
 
@@ -28,13 +27,22 @@ public class GenerateCNFCommand implements CommandExecutor {
 		if (label.equalsIgnoreCase(COMMAND_NAME)) {
 			if (sender.isOp() && sender instanceof Player) {
 				if (args.length >= 1) {
-					//String input = args[0];
+					String input = "";
+					for (int i = 0; i < args.length; i++) {
+						input += args[i] + " ";
+					}
 					//TODO parse cnf
-					CNFBuilder builder = new CNFBuilder();
+					/*CNFBuilder builder = new CNFBuilder();
 					builder.addClause(new BuilderLiteral("x", false), new BuilderLiteral("y", false), new BuilderLiteral("z", false));
 					builder.addClause(new BuilderLiteral("x", true), new BuilderLiteral("y", false), new BuilderLiteral("z", false));
-					builder.addClause(new BuilderLiteral("x", false), new BuilderLiteral("y", false), new BuilderLiteral("z", true));
-					CNF cnf = builder.build();
+					builder.addClause(new BuilderLiteral("x", false), new BuilderLiteral("y", false), new BuilderLiteral("z", true));*/
+					
+					CNF cnf = CNFParser.parse(input);
+					
+					if (cnf == null) {
+						sender.sendMessage("The input " + input + " is not a valid cnf!");
+						return true;
+					}
 					
 					CNFWaterMachine machine =  CNFWaterBuilder.build(((Player) sender).getLocation(), cnf);
 					machine.assign(true, true, false);
