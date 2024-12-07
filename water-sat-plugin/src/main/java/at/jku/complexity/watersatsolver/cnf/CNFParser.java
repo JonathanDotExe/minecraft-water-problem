@@ -1,6 +1,5 @@
 package at.jku.complexity.watersatsolver.cnf;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +13,6 @@ public class CNFParser {
 
 	
 	private static BuilderLiteral parseLiteral(String token) {
-		System.out.println("Checking literal " + token);
 		boolean negate = false;
 		token = token.replace(BRACKET_OPEN, "").replace(BRACKET_CLOSE, "").trim();
 		if (token.startsWith(NOT)) {
@@ -22,7 +20,6 @@ public class CNFParser {
 			negate = true;
 		}
 		if (token.isEmpty() || !token.chars().allMatch(Character::isAlphabetic)) {
-			System.err.println(token + " is not a valid literal!");
 			return null;
 		}
 		return new BuilderLiteral(token, negate);
@@ -30,7 +27,6 @@ public class CNFParser {
 	
 	
 	private static Set<BuilderLiteral> parseClause(String token) {
-		System.out.println("Checking clause " + token);
 		token = token.trim();
 		Set<BuilderLiteral> clause = new HashSet<>();
 		//Single literal
@@ -41,17 +37,13 @@ public class CNFParser {
 		}
 		//Brackets
 		if (!token.startsWith(BRACKET_OPEN) || !token.endsWith(BRACKET_CLOSE)) {
-			System.out.println("No brackets for clause " + token);
 			return null;
 		}
 		
 		while(token.startsWith(BRACKET_OPEN) && token.endsWith(BRACKET_CLOSE)) {
 			token = token.substring(1, token.length() - 1);
 		}
-		System.out.println(token);
 		String[] literals = token.split("\\" + OR);
-		System.out.println(Arrays.toString(literals));
-		System.out.println(OR);
 		for (String t : literals) {
 			l = parseLiteral(t);
 			if (l == null) {

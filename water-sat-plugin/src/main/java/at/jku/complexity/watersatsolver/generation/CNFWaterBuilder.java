@@ -61,11 +61,11 @@ public class CNFWaterBuilder {
 				final Literal nl = new Literal(i, true);
 				//Positive
 				if (clause.getLiterals().contains(l)) {
-					literals.add(new LiteralBlock(place.clone().add(2, 2, 0), l));
+					place.clone().add(2, 2, 0).getBlock().setType(Material.AIR);
 				}
 				//Negative
 				if (clause.getLiterals().contains(nl)) {
-					literals.add(new LiteralBlock(place.clone().add(3, 2, 0), nl));
+					place.clone().add(3, 2, 0).getBlock().setType(Material.AIR);
 				}
 				
 				place.add(Structures.getSplitter().getSize().getX() - 1, 0, 0);
@@ -85,7 +85,7 @@ public class CNFWaterBuilder {
 			place.add(0, -1, Structures.getSplitter().getSize().getZ() + 1);
 		}
 		
-		return new CNFWaterMachine(start, new BlockVector(width, height, length), variableLocs, waterLocs, sandLocs, literals, 5 * (width + height + length));
+		return new CNFWaterMachine(start, new BlockVector(width, height, length), variableLocs, waterLocs, sandLocs, 5 * (width + height + length));
 	}
 
 }

@@ -45,7 +45,6 @@ public class GenerateCNFCommand implements CommandExecutor {
 					}
 					
 					CNFWaterMachine machine =  CNFWaterBuilder.build(((Player) sender).getLocation(), cnf);
-					machine.assign(true, true, false);
 					
 					//Assignments
 					RunningCNF run = new RunningCNF(cnf, machine);

@@ -15,14 +15,13 @@ public class CNFWaterMachine {
 	private final Location[] variableWaterLocations;
 	private final Set<Location> fixedWaterLocations;
 	private final Set<Location> sandLocations;
-	private final Set<LiteralBlock> literals;
 	
 	private final long ticksTillFinished;
 	
 	
 	
 	public CNFWaterMachine(Location location, BlockVector size, Location[] variableWaterLocations,
-			Set<Location> fixedWaterLocations, Set<Location> sandLocations, Set<LiteralBlock> literals,
+			Set<Location> fixedWaterLocations, Set<Location> sandLocations,
 			long ticksTillFinished) {
 		super();
 		this.location = location;
@@ -30,7 +29,6 @@ public class CNFWaterMachine {
 		this.variableWaterLocations = variableWaterLocations;
 		this.fixedWaterLocations = fixedWaterLocations;
 		this.sandLocations = sandLocations;
-		this.literals = literals;
 		this.ticksTillFinished = ticksTillFinished;
 	}
 
@@ -59,15 +57,6 @@ public class CNFWaterMachine {
 		//Fixed water
 		for (Location location : fixedWaterLocations) {
 			location.getBlock().setType(Material.WATER);
-		}
-		//Literals
-		for (LiteralBlock l : literals) {
-			if (assignment[l.getLiteral().getVariable()] != l.getLiteral().isNegate()) {
-				l.getLocation().getBlock().setType(Material.AIR);
-			}
-			else {
-				l.getLocation().getBlock().setType(Material.MAGENTA_WOOL);
-			}
 		}
 	}
 	
