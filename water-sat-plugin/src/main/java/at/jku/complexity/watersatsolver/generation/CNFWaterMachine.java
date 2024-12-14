@@ -38,7 +38,7 @@ public class CNFWaterMachine {
 			for (int y = 0; y < size.getBlockY(); y++) {
 				for (int z = 0; z < size.getBlockZ(); z++) {
 					Block block = location.getBlock().getRelative(x, y, z);
-					if (block.getType() == Material.WATER) {
+					if (!block.getType().isSolid()) {
 						block.setType(Material.AIR);
 					}
 				}
@@ -46,9 +46,9 @@ public class CNFWaterMachine {
 		}
 		//Sand
 		for (Location location : sandLocations) {
-			location.clone().add(0, -2, 0).getBlock().setType(Material.AIR, false);
-			location.clone().add(0, -1, 0).getBlock().setType(Material.TRIPWIRE, false);
-			location.getBlock().setType(Material.SAND, false);
+			location.clone().add(0, -2, 0).getBlock().setType(Material.AIR);
+			location.clone().add(0, -1, 0).getBlock().setType(Material.TRIPWIRE);
+			location.getBlock().setType(Material.SAND);
 		}
 		//Variables
 		for (int i = 0; i < variableWaterLocations.length; i++) {

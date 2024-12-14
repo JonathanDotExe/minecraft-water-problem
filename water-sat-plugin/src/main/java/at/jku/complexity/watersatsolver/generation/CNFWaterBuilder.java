@@ -19,11 +19,11 @@ public class CNFWaterBuilder {
 	public static CNFWaterMachine build(Location place, CNF cnf) {
 		int width = (Structures.getVariable().getSize().getBlockX() - 1) * cnf.getVariables().length + 1;
 		int length = Structures.getVariable().getSize().getBlockZ() + Structures.getSplitter().getSize().getBlockZ() * cnf.getClauses().size();
-		int height = Structures.getVariable().getSize().getBlockY() + cnf.getClauses().size() + cnf.getVariables().length;
+		int height = Structures.getVariable().getSize().getBlockY() + cnf.getClauses().size() + cnf.getVariables().length + 1;
 
 		Location start = place.clone();
 		place = place.clone();
-		place.add(0, height, 0);
+		place.add(0, height - Structures.getVariable().getSize().getBlockY(), 0);
 		
 		int startX = place.getBlockX();
 		Location[] variableLocs = new Location[cnf.getVariables().length];
@@ -49,7 +49,6 @@ public class CNFWaterBuilder {
 		}
 
 		place.add(0, -1, Structures.getVariable().getSize().getZ());
-		Set<LiteralBlock> literals = new HashSet<>();
 		//Clauses
 		for (Clause clause : cnf.getClauses()) {
 			place.setX(startX);
@@ -85,7 +84,7 @@ public class CNFWaterBuilder {
 			place.add(0, -1, Structures.getSplitter().getSize().getZ() + 1);
 		}
 		
-		return new CNFWaterMachine(start, new BlockVector(width, height, length), variableLocs, waterLocs, sandLocs, 5 * (width + height + length));
+		return new CNFWaterMachine(start, new BlockVector(width, height, length), variableLocs, waterLocs, sandLocs, 5 * 7 * height);
 	}
 
 }
