@@ -1,18 +1,32 @@
 \documentclass{article}
 \usepackage{graphicx} % Required for inserting images
-\usepackage[naustrian]{babel}
+\usepackage[english]{babel}
 \usepackage[a4paper]{geometry}
+\usepackage[sorting=none]{biblatex}
+\usepackage{dirtytalk}
+\usepackage[hidelinks]{hyperref}
+\usepackage{csquotes}
+
+\hypersetup{
+    pdftitle={The Minecraft Water Problem is NP Complete},
+    pdfpagemode=FullScreen
+}
+
+
+\addbibresource{bibliography/references.bib}
 
 \title{The Minecraft Water Problem is NP complete}
-\author{Michael Fletzberger \and Jonathan Hocheneder \and Simon Oppel \and Ellena Pfleger \and Yannick Ratzenböck \and Felix Willhelmer}
-\date{November 2024}
+\author{Michael Fletzberger \and Jonathan Hocheneder \and Simon Oppel \and Ellena Pfleger \and Yannick Ratzenböck \and Felix Wilhelmer}
+
+\date{\today}
 
 \begin{document}
 \maketitle
 \tableofcontents
-\include{mcwaterprobblem}
+\include{mcwaterproblem}
 \include{npmember}
 \include{npcomplete}
 \include{example}
 \include{summary}
+\printbibliography[heading=bibintoc,title={References}]
 \end{document}
