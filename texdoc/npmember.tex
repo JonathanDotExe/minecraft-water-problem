@@ -3,40 +3,42 @@
 	
 	\subsection{Constructing the certificate and verifier}
 	\paragraph{The Tape Alphabet}
-	Now we introduce a tape alphabet which will later allow us to construct the verifying Turing Machine. 
+	Firstly, we introduce a tape alphabet which will later allow us to construct the verifying Turing Machine. 
 	The tape shall contain the following information: what kind of block is found at which position.
-	To do this we introduce a specific structure to each entry on the tape: (block, x-coordinate, y-coordinate, z-coordinate).
-	Going back to the tape alphabet we now see that it has to contain an encoding for all blocks possibly found in the world.
+	To do this, we introduce a specific structure to each entry on the tape: (block, x-coordinate, y-coordinate, z-coordinate).
+	Going back to the tape alphabet, we now see that it has to contain an encoding for all blocks possibly found in the world.
 	We are also going to encode the coordinates using natural numbers separated using special symbols.
-	Additionally we will need encodings for each block marked with all possible update that could happen to it. 
+	Additionally, we will need encodings for each block marked with all possible updates that could happen. 
 	e.g.\ instead of encoding a tripwire block as \emph{T}, we will encode a tripwire block that could be replaced by water as \emph{Tw}.
-	The use for these update blocks as we will call them will become clearer once we discuss how to evaluate the updates within a single tick.
+	The use of these update blocks as we will call them will become clearer once we discuss how to evaluate the updates within a single tick.
 
 
 	\paragraph{Tick Logic}
-	Now we want to show that only a polynomial number of ticks possible. The Minecraft world consists of $n = x\_range * y\_range * z\_range$ blocks. One tick is a     transition from one valid world state to another valid world state. In principle water can flow horizontally for a maximum distance of seven blocks in each  direction. If the water flows down to a lower level, this maximum of seven blocks resets, and the water can flow for another seven blocks horizontally on the new level. Because our world is finite, the maximum flow path is constrained by the world borders. In the worst case the water flows from one border seven blocks before flowing downward, repeating this for every vertical level of the world. For simplicity we can estimate the maximum flow length in the following analysis as n, because trivially it cannot be bigger than n. Moreover, since the number of blocks is calculated as $x\_range * y\_range * z\_range$, where every range must be at least $\geq 1$, $y\_range \leq n$. This results in a maximum number of $n * n$ ticks. The only variation is possible through the effect of tripwires. When water flows onto a block with tripwire, the interaction may cause sand blocks to fall down and trigger water to flow again from the maximum y\_range. Thus, our worst-case number of ticks becomes $n * n * t$, where t describes the number of tripwires. Additionally, at maximum one tripwire can be placed on every block, therefore, t must be $\leq n$. This results in a worst-case number of $n * n * n$ ticks, which is in $O(n^{3})$.
+	Now we want to show that only a polynomial number of ticks is possible. The Minecraft world consists of $n = x\_range * y\_range * z\_range$ blocks. One tick is a transition from one valid world state to another valid world state. In principle, water can flow horizontally for a maximum distance of seven blocks in each direction. If the water flows down to a lower level, this maximum of seven blocks resets and the water can flow for another seven blocks horizontally on the new level. Because our world is finite, the maximum flow path is constrained by the world borders. In the worst case the water flows from one border seven blocks before flowing downward, repeating this for every vertical level of the world. For simplicity, we can estimate the maximum flow length in the following analysis as n, because trivially it cannot be larger than n. Moreover, since the number of blocks is calculated as $x\_range * y\_range * z\_range$, where every range must be at least $\geq 1$, thus $y\_range \leq n$. This results in a maximum number of $n * n$ ticks. The only variation is possible through the effect of tripwires. When water flows onto a block with tripwire, the interaction may cause sand blocks to fall down and trigger water to flow again from the maximum y\_range. Hence, our worst-case number of ticks becomes $n * n * t$, where t describes the number of tripwires. Additionally, only a maximum of one tripwire can be placed on every block, therefore, t must be $\leq n$. This results in a worst-case number of $n * n * n$ ticks, which is in $O(n^{3})$.
 	
 	
 	\paragraph{Updating the world}
 	We can construct an update logic which a Turing Machine can compute within a runtime that is polynomially dependent on the size of the World.
 	The tape head starts with the encoding of a block on the tape and evaluates what kind of update this block wants to make at which positions.
-	Since the position which shall be updated is dependent on the position of the block that is currently being evaluated the coordinates of the next update are easily calculated.
+	Since the position which shall be updated is dependent on the position of the block that is currently being evaluated, the coordinates of the next update can be easily calculated.
 	The tape head can then loop through the entire tape, searching for these coordinates.
-	Once this position has been found it rewrites the encoded block as an update block.
+	Once this position has been found, it rewrites the encoded block as an update block.
 	These update blocks have been defined earlier as part of the tape alphabet. They are intended to mark all positions updated in the current tick.
-	Which update block is written is decided by the update itself and the block at this position eg 
+	Which update block is written is decided by the update itself and the block at this position.
 	It continues this process for every block in the given world, meaning that evaluating all updates is achived in $n^2$.
 	After this it can loop through the entire tape once more and rewrite all update blocks according to the update hierachy defined earlier.
 	This results in a valid world state, thereby having finished one tick in a runtime of $n^{2} + n = O(n^{2})$.
+ 
 
 	\paragraph{The Certificate}
 	The certificate in this case is an assignment of water blocks to the lapis blocks.
 	Since water can only be placed on lapis blocks the certificate is limited in size by the number of lapis blocks.
-	There can be at most n lapis blocks in the world. In order to place water on them the space above them must be free.
-	Therefore the longest possible assignment is $n/2$ in length. This means that the certificate scales linearly with the size of the world.
+	There can be at most n lapis blocks in the world. In order to place water on them, the space above them must be free.
+	Therefore, the longest possible assignment is $n/2$ in length. This means that the certificate scales linearly with the size of the world.
 	
-	\paragraph{Accepting and Rejecting}
-	Once there has been a tick with no updates, we can start checking the gold block. It is not possible that there exists a tick with updates after a tick with no updates. For this check we need to loop through the tape and look at every entry. If the current block is a gold block we look at the block above and check if this is a water block. In this loop we look at every entry, therefore the runtime is n. To check the existence of a water block above we need to go through the entire tape in the worst-case, resulting in a runtime of $O(n^{2})$. If we discover that one gold block is not covered with water we can reject the assignment, thus if we get to the last entry of the tape without rejecting, we can accept the assignment. Therefore our verifier is complete and sound.
+	
+ 	\paragraph{Accepting and Rejecting}
+	Once there has been a tick with no updates, we can start checking the gold blocks. It is not possible that there exists a tick with updates after a tick with no updates. For this check we need to loop through the tape and look at every entry. If the current block is a gold block, we look at the block above and check if this is a water block. In this loop, we look at every entry, therefore the runtime is n. To check the existence of a water block above we need to go through the entire tape in the worst-case, resulting in a runtime of $O(n^{2})$. If we discover that one gold block is not covered with water, we can reject the assignment, thus if we get to the last entry of the tape without rejecting, we can accept the assignment. Therefore, our verifier is complete and sound. Moreover, our verifier runs also in polynomial runtime, because updating for one tick takes $n^{2}$,there are at most $n^{3}$ ticks and accepting and rejecting runs in $n^{2}$ as previously determined. This results in a total runtime for the verifier of $n^5 + n^2 = O(n^5)$.
 	
 	
 	Now we have found a short certificate and a verifying Turing Machine, thus proving that our language is a member of NP. Finding an given assignment is much harder than verifying it, but is definitely solvable by brute-forcing in exponential time, hence part of EXP.
