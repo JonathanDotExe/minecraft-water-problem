@@ -39,7 +39,7 @@
 \subsection{Allowed Blocks in MCWATER} \label{blocks}
 
 \noindent For our definition of the \textit{Minecraft Water Problem}, we limit the usage of blocks/objects that we can place in our world to the following 7:
-\paragraph{Wool}
+\paragraph{Wool\cite{minecraftfandom:wool}}
 Wool is a block that can be obtained from sheep in the game.
 They can be colored in 16 different colors with the corresponding dye.
 For our problem, we use wool to indicate a path or a channel through which water can flow.
@@ -48,30 +48,30 @@ We will use five different colors with different definitions:
     \item White wool: path of a variable
     \item Light gray wool: path of the negation of the variable
     \item Orange wool: transitional path between the two former
-    \item Purple wool: part of the splitter (later described in Section \ref{splitter})
+    \item Magenta wool: part of the splitter (later described in Section \ref{splitter})
     \item Cyan wool: part of the collector (later described in Section \ref{collector})
 \end{itemize}
 
-\paragraph{Glass}
+\paragraph{Glass\cite{minecraftfandom:glass}}
 Glass is a block that can be obtained by smelting sand in a furnace.
 We use it as the borders for the paths through which water can flow.
 
-\paragraph{Block of Gold}
+\paragraph{Block of Gold\cite{minecraftfandom:bog}}
 A Block of Gold can be obtained by crafting nine gold ores together.
 \newline It shows whether an assignment is satisfiable or not depending on whether all gold blocks in the world are covered by water.
 
-\paragraph{Block of Lapis Lazuli}
+\paragraph{Block of Lapis Lazuli\cite{minecraftfandom:boll}}
 A Block of Lapis Lazuli can be obtained by crafting 9 Lapis Lazuli minerals together.
 They mark the position of the water source that represents the variables.
 
-\paragraph{String/Tripwire}
+\paragraph{String/Tripwire\cite{minecraftfandom:string}}
 A piece of string can be obtained by defeating a spider in the game.
 They can be placed on top of blocks and interact with objects and are now called a tripwire.
 The property most relevant to our problem is that if a tripwire is below a block that could fall due to gravity, the block will not fall.
 We will use this to prevent a sand block from falling.
 Tripwires will be destroyed if water is flowing to the same coordinate.
 
-\paragraph{Sand}
+\paragraph{Sand\cite{minecraftfandom:sand}}
 Sand is a block that is generated near water or in a desert biome.
 It is one of the few blocks in \textit{Minecraft} that is influenced by gravity.
 \marginpar{\tiny If there are no blocks at all below sand, then we assume it just gets deleted from the world.}{If} there is no solid block or string below the sand, it will fall until it cannot go any further.
@@ -81,7 +81,7 @@ We use this property to prevent water from flowing into an unwanted channel. In 
 
 \pagebreak
 \paragraph{Water}
-Water naturally generates in the world to form oceans, rivers, and springs. \cite{minecraftfandom:water}
+Water naturally generates in the world to form oceans, rivers, and springs\cite{minecraftfandom:water}. 
 It mimics the properties of water(as a fluid) in the real world.
 If there are no air blocks (or simply empty blocks) in the adjacent tiles,
 the water stands still. Otherwise the water spreads according to a specific flow logic.
