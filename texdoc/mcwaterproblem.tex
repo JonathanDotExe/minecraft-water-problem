@@ -1,16 +1,103 @@
 \section{The Minecraft Water Problem}
+% put an intro here
+\noindent Our problem uses the popular game \textit{Minecraft} and its properties as its base. In \textit{Minecraft}, the player can generate a "random" world, in which he can then place and break blocks at will. For the \textit{Minecraft Water Problem} we took an abstract version of \textit{Minecraft}, using the natural mechanics of the game and setting certain rules for world generation and updates of the world (Ticks). In the further sections of this paper, we will discuss the required rules to make our problem possible and a detailed description of why this problem is NP-Complete.
 
-\begin{center}
-\say{\large No one cares what you’re mining until you find diamonds.} \ \cite{deepmcquotes}
+\subsection{Definition}
+%TODO: Formale Definition vom Problem
+
+
+\subsection{The World} 
+
+\noindent As already said in the introduction for this problem, we use a special \textit{Minecraft} world which we will call \textbf{MCWATER}. A \textit{Minecraft} world in the format of \textbf{MCWATER} needs to follow certain rules:
+
+\begin{itemize}
+    \item It can only contain certain blocks (specified in section \ref{blocks})
+    \item The player may not change anything in the world
+    \item Special rules for interaction of blocks (specified in section \ref{rules}
+\end{itemize}
+
+\subsection{Rules for updating blocks} \label{rules}
+\noindent The interactions of the blocks used in our world are defined as follows:
+
+\begin{itemize}
+    \item If a block wants to replace water, it will always do so
+    \item When water wants to replace a tripwire, it will always do so
+    \item If two water blocks meet, the one with the higher water level will win \textit{(Water level describes the "strength" of flowing water from its source block. The water level will decrease by one for each block that it has flown away from its source)}
+    \item If two flowing waters at the highest water level meet, they will form a solid water block.
+\end{itemize}
+
+\subsection{Block Updates} \label{blockupdates}
+
+\noindent When updating the world and its blocks, we use the following method (while considering the rules for updating blocks \ref{rules}):
+
+%TODO: Ticks und Updated erklären (in Abstimmung mit Text von Felix und Simon)
+\noindent Firstly, we go through every block and ask them how they want to change their environment. If more than one block wants to change a certain block, we will check the rules and change that block accordingly. 
+
+\noindent It is also important to note that the number of blocks that are taken into account in each update is always constant.
+
+\pagebreak
+\subsection{Allowed Blocks in MCWATER} \label{blocks}
+
+\noindent For our definition of the \textit{Minecraft Water Problem}, we limit the usage of blocks/objects that we can place in our world to the following 7:
+\paragraph{Wool}
+Wool is a block that can be obtained from sheep in the game.
+They can be colored in 16 different colors with the corresponding dye.
+For our problem, we use wool to indicate a path or a channel through which water can flow.
+We will use five different colors with different definitions:
+\begin{itemize}
+    \item White wool: path of a variable
+    \item Light gray wool: path of the negation of the variable
+    \item Orange wool: transitional path between the two former
+    \item Purple wool: part of the splitter (later described in Section \ref{splitter})
+    \item Cyan wool: part of the collector (later described in Section \ref{collector})
+\end{itemize}
+
+\paragraph{Glass}
+Glass is a block that can be obtained by smelting sand in a furnace.
+We use it as the borders for the paths through which water can flow.
+
+\paragraph{Block of Gold}
+A Block of Gold can be obtained by crafting nine gold ores together.
+\newline It shows whether an assignment is satisfiable or not depending on whether all gold blocks in the world are covered by water.
+
+\paragraph{Block of Lapis Lazuli}
+A Block of Lapis Lazuli can be obtained by crafting 9 Lapis Lazuli minerals together.
+They mark the position of the water source that represents the variables.
+
+\paragraph{String/Tripwire}
+A piece of string can be obtained by defeating a spider in the game.
+They can be placed on top of blocks and interact with objects and are now called a tripwire.
+The property most relevant to our problem is that if a tripwire is below a block that could fall due to gravity, the block will not fall.
+We will use this to prevent a sand block from falling.
+Tripwires will be destroyed if water is flowing to the same coordinate.
+
+\paragraph{Sand}
+Sand is a block that is generated near water or in a desert biome.
+It is one of the few blocks in \textit{Minecraft} that is influenced by gravity.
+\marginpar{\tiny If there are no blocks at all below sand, then we assume it just gets deleted from the world.}{If} there is no solid block or string below the sand, it will fall until it cannot go any further.
+We use this property to prevent water from flowing into an unwanted channel. In the game, there is some delay between falling and being placed again, but for the definition of our problem, we assume that if a block is falling, it immediately falls to the maximum position it can fall during a block update. 
+
+\noindent \newline For example, if a string is below a sand block, it will not fall, but if the string is destroyed, the sand will take its place by falling one block below.
+
+\pagebreak
+\paragraph{Water}
+Water naturally generates in the world to form oceans, rivers, and springs. \cite{minecraftfandom:water}
+It mimics the properties of water(as a fluid) in the real world.
+If there are no air blocks (or simply empty blocks) in the adjacent tiles,
+the water stands still. Otherwise the water spreads according to a specific flow logic.
+
+\paragraph{Flow behavior of water}
+Water spreads horizontally and downward into nearby air \marginpar{\tiny When water flows infinitely out of the world, we can assume it disappears because it does not change the outcome of the problem.}{blocks}. Water can spread downward infinitely until stopped by a block, and 7 blocks horizontally from a source block on a flat surface. \newline Water spreads at a rate of 1 block every 5 game ticks, or 4 blocks per second \cite{minecraftfandom:waterspread}.\newline
+\newline This definition refers to the actual in-game tick system, however we use our own abstraction described in section \ref{blockupdates}.
+Therefore we summarize 5 game ticks to a single block update.
+\newline If there is a need to extend the water flow, we can move the flow one layer (or block) below in the 7 block range from the source block.
+The value that is used to determine the current flow is reset and we have another 7 blocks to work with that can also be extended as needed.
+\newline When water flow gets blocked by a solid block, the water after the block gets drained, or simply: it disappears. In the game, this does not happen instantaneously, but to simplify the definition we assume it does at a block update.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/diamonds.png}
-    \caption{Cave with Diamonds!1!11! \cite{knuthwebsite}}
-    \label{fig:cave-diamonds}
+    \includegraphics[width=\linewidth]{images/allowed blocks.png}
+    \caption{allowed blocks as described from left to right (water encased in glass)}
+    \label{fig:allowedblocks}
 \end{figure}
-\end{center}
 
-\subsection{Description}
-
-As seen in Figure \ref{fig:cave-diamonds} on page \pageref{fig:cave-diamonds}, there are a lot of diamonds in this cave.
