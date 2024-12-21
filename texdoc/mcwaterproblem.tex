@@ -2,6 +2,10 @@
 % put an intro here
 \noindent Our problem uses the popular game \textit{Minecraft} and its properties as its base. In \textit{Minecraft}, the player can generate a "random" world, in which he can then place and break blocks at will. For the \textit{Minecraft Water Problem} we took an abstract version of \textit{Minecraft}, using the natural mechanics of the game and setting certain rules for world generation and updates of the world (Ticks). In the further sections of this paper, we will discuss the required rules to make our problem possible and a detailed description of why this problem is NP-Complete.
 
+\subsection{Definition}
+%TODO: Formale Definition vom Problem
+
+
 \subsection{The World} 
 
 \noindent As already said in the introduction for this problem, we use a special \textit{Minecraft} world which we will call \textbf{MCWATER}. A \textit{Minecraft} world in the format of \textbf{MCWATER} needs to follow certain rules:
@@ -9,7 +13,7 @@
 \begin{itemize}
     \item It can only contain certain blocks (specified in section \ref{blocks})
     \item The player may not change anything in the world
-    \item Special rules for interaction of blocks (specified in section \ref{rules})
+    \item Special rules for interaction of blocks (specified in section \ref{rules}
 \end{itemize}
 
 \subsection{Rules for updating blocks} \label{rules}
@@ -23,12 +27,10 @@
 \end{itemize}
 
 \subsection{Block Updates} \label{blockupdates}
-\noindent A Minecraft world is updated in "ticks". The dynamics behind these ticks and which blocks are affected are complicated which is why we will not dive deeper into this subject. For our abstraction we reduce the tick logic to \textit{1 Tick = 1 Water-Update}. There will be a deeper explanation about the updating of blocks in section \ref{updating} \textit{Updating the World}, but we will go over the basics.
-
-%TODO: Ticks und Updated erklären (in Abstimmung mit Text von Felix und Simon)
 
 \noindent When updating the world and its blocks, we use the following method (while considering the rules for updating blocks \ref{rules}):
 
+%TODO: Ticks und Updated erklären (in Abstimmung mit Text von Felix und Simon)
 \noindent Firstly, we go through every block and ask them how they want to change their environment. If more than one block wants to change a certain block, we will check the rules and change that block accordingly. 
 
 \noindent It is also important to note that the number of blocks that are taken into account in each update is always constant.
@@ -98,13 +100,4 @@ The value that is used to determine the current flow is reset and we have anothe
     \caption{allowed blocks as described from left to right (water encased in glass)}
     \label{fig:allowedblocks}
 \end{figure}
-
-
-\subsection{Definition}
-
-Now that the cornerstones of our problem are defined we can give a formal definition of our Language \textit{WATERGOLD}:
-
-A \textbf{MCWATER} world is part of \textit{WATERGOLD} if there exists a subset of Lapis Lazuli Blocks, so that every gold block is covered by water if we place a water block on every Lapis Lazuli Block of this subset at the same time. For this check, we will update the \textbf{MCWATER} world until no changes are made anymore.
-
-
 
