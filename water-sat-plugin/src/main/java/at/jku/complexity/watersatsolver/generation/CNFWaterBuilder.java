@@ -18,8 +18,8 @@ public class CNFWaterBuilder {
 	
 	public static CNFWaterMachine build(Location place, CNF cnf) {
 		int width = (Structures.getVariable().getSize().getBlockX() - 1) * cnf.getVariables().length + 1;
-		int length = Structures.getVariable().getSize().getBlockZ() + Structures.getSplitter().getSize().getBlockZ() * cnf.getClauses().size();
-		int height = Structures.getVariable().getSize().getBlockY() + cnf.getClauses().size() + cnf.getVariables().length + 1;
+		int length = Structures.getVariable().getSize().getBlockZ() + Structures.getSplitter().getSize().getBlockZ() * cnf.getClauses().length;
+		int height = Structures.getVariable().getSize().getBlockY() + cnf.getClauses().length + cnf.getVariables().length + 1;
 
 		Location start = place.clone();
 		place = place.clone();
@@ -59,11 +59,11 @@ public class CNFWaterBuilder {
 				final Literal l = new Literal(i, false);
 				final Literal nl = new Literal(i, true);
 				//Positive
-				if (clause.getLiterals().contains(l)) {
+				if (clause.hasLiteral(l)) {
 					place.clone().add(2, 2, 0).getBlock().setType(Material.AIR);
 				}
 				//Negative
-				if (clause.getLiterals().contains(nl)) {
+				if (clause.hasLiteral(nl)) {
 					place.clone().add(3, 2, 0).getBlock().setType(Material.AIR);
 				}
 				

@@ -1,25 +1,22 @@
 package at.jku.complexity.watersatsolver.cnf;
 
-import java.util.Collections;
-import java.util.Set;
-
 public class CNF {
 	
 	private final String[] variables;
-	private final Set<Clause> clauses;
+	private final Clause[] clauses;
 	
-	public CNF(String[] variables, Set<Clause> clauses) {
+	public CNF(String[] variables, Clause[] clauses) {
 		super();
 		this.variables = variables;
-		this.clauses = Collections.unmodifiableSet(clauses);
+		this.clauses = clauses.clone();
 	}
 
 	public String[] getVariables() {
 		return variables.clone();
 	}
 
-	public Set<Clause> getClauses() {
-		return clauses;
+	public Clause[] getClauses() {
+		return clauses.clone();
 	}
 
 	public String getVariableName(int variable) {

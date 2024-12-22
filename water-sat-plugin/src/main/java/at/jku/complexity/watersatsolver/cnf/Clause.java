@@ -1,19 +1,22 @@
 package at.jku.complexity.watersatsolver.cnf;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.Arrays;
 
 public class Clause {
 	
-	private final Set<Literal> literals;
+	private final Literal[] literals;
 
-	public Clause(Set<Literal> literals) {
+	public Clause(Literal[] literals) {
 		super();
-		this.literals = Collections.unmodifiableSet(literals);
+		this.literals = literals.clone();
 	}
 
-	public Set<Literal> getLiterals() {
-		return literals;
+	public Literal[] getLiterals() {
+		return literals.clone();
+	}
+	
+	public boolean hasLiteral(Literal lit) {
+		return Arrays.stream(literals).anyMatch(l -> lit.equals(l));
 	}
 
 	@Override

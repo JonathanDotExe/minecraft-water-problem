@@ -1,7 +1,7 @@
 package at.jku.complexity.watersatsolver.cnf;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CNFParser {
 	
@@ -26,14 +26,14 @@ public class CNFParser {
 	}
 	
 	
-	private static Set<BuilderLiteral> parseClause(String token) {
+	private static BuilderLiteral[] parseClause(String token) {
 		token = token.trim();
-		Set<BuilderLiteral> clause = new HashSet<>();
+		List<BuilderLiteral> clause = new ArrayList<>();
 		//Single literal
 		BuilderLiteral l = parseLiteral(token);
 		if (l != null) {
 			clause.add(l);
-			return clause;
+			return clause.toArray(new BuilderLiteral[clause.size()]);
 		}
 		//Brackets
 		if (!token.startsWith(BRACKET_OPEN) || !token.endsWith(BRACKET_CLOSE)) {
@@ -51,7 +51,7 @@ public class CNFParser {
 			}
 			clause.add(l);
 		}
-		return clause;
+		return clause.toArray(new BuilderLiteral[clause.size()]);
 	}
 	
 	public static CNF parse(String token) {
@@ -61,7 +61,7 @@ public class CNFParser {
 		String[] clauseStrings = token.split(AND);
 		
 		for (String t : clauseStrings) {
-			Set<BuilderLiteral> clause = parseClause(t);
+			BuilderLiteral[] clause = parseClause(t);
 			if (clause == null) {
 				return null;
 			}

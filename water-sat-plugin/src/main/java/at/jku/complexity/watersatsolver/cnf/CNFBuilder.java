@@ -1,24 +1,20 @@
 package at.jku.complexity.watersatsolver.cnf;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class CNFBuilder {
 
 	private int nextVariable = 0;
 	private Map<String, Integer> variables = new HashMap<>();
-	private Set<Clause> clauses = new HashSet<>();
-	
+	private List<Clause> clauses = new ArrayList<Clause>();
+
 	public void addClause(BuilderLiteral... clause) {
-		addClause(new HashSet<>(Arrays.asList(clause)));
-	}
-	
-	public void addClause(Set<BuilderLiteral> clause) {
-		Set<Literal> literals = new HashSet<>();
-		for (BuilderLiteral l : clause) {
+		Literal[] literals = new Literal[clause.length];
+		for (int i = 0; i < clause.length; i++) {
+			BuilderLiteral l = clause[i];
 			//Create new var id
 			int id = 0;
 			if (!variables.containsKey(l.getVariable())) {
@@ -30,7 +26,7 @@ public class CNFBuilder {
 				id = variables.get(l.getVariable());
 			}
 			
-			literals.add(new Literal(id, l.isNegate()));
+			literals[i] = new Literal(id, l.isNegate());
 		}
 		
 		clauses.add(new Clause(literals));
@@ -41,7 +37,7 @@ public class CNFBuilder {
 		for (Map.Entry<String, Integer> e : variables.entrySet()) {
 			vars[e.getValue()] = e.getKey();
 		}
-		return new CNF(vars, clauses);
+		return new CNF(vars, clauses.toArray(new Clause[clauses.size()]));
 	}
 	
 }
