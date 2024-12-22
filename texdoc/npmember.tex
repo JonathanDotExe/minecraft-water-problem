@@ -6,7 +6,8 @@
 	Firstly, we introduce a tape alphabet which will later allow us to construct the verifying Turing Machine. 
 	The tape shall contain the following information: what kind of block is found at which position.
 	To do this, we introduce a specific structure to each entry on the tape: (block, x-coordinate, y-coordinate, z-coordinate).
-	Going back to the tape alphabet, we now see that it has to contain an encoding for all blocks possibly found in the world.
+	Going back to the tape alphabet, we now see that it has to contain an encoding for all blocks possibly found in the world, because even currently empty blocks are assigned an entry.
+ 	For the entries of empty blocks, we set air as the block on the tape.
 	We are also going to encode the coordinates using natural numbers separated using special symbols.
 	Additionally, we will need encodings for each block marked with all possible updates that could happen. 
 	e.g.\ instead of encoding a tripwire block as \emph{T}, we will encode a tripwire block that could be replaced by water as \emph{Tw}.
@@ -34,10 +35,10 @@
 	\paragraph{The Certificate}
 	The certificate in this case is an assignment of water blocks to the lapis blocks.
 	Since water can only be placed on lapis blocks the certificate is limited in size by the number of lapis blocks.
-	There can be at most n lapis blocks in the world. In order to place water on them, the space above them must be free.
+	There can be at most n blocks in the world. In order to place water on the lapis blocks, the space above them must be free.
 	Therefore, the longest possible assignment is $n/2$ in length. This means that the certificate scales linearly with the size of the world.
 	
 	
  	\paragraph{Accepting and Rejecting}
-	Once there has been a tick with no updates, we can start checking the gold blocks. It is not possible that there exists a tick with updates after a tick with no updates. For this check we need to loop through the tape and look at every entry. If the current block is a gold block, we look at the block above and check if this is a water block. In this loop, we look at every entry, therefore the runtime is n. To check the existence of a water block above we need to go through the entire tape in the worst-case, resulting in a runtime of $O(n^{2})$. If we discover that one gold block is not covered with water, we can reject the assignment, thus if we get to the last entry of the tape without rejecting, we can accept the assignment. Therefore, our verifier is complete and sound. Moreover, our verifier runs also in polynomial runtime, because updating for one tick takes $n^{2}$,there are at most $n^{3}$ ticks and accepting and rejecting runs in $n^{2}$ as previously determined. This results in a total runtime for the verifier of $n^5 + n^2 = O(n^5)$.
+	Once there has been a tick with no updates, we can start checking the gold blocks. It is not possible that there exists a tick with updates after a tick with no updates. For this check we need to loop through the tape and look at every entry. If the current block is a gold block, we look at the block above and check if this is a water block. In this loop, we look at every entry, therefore the runtime is n. To check the existence of a water block above we need to go through the entire tape in the worst-case, resulting in a runtime of $O(n^{2})$. If we discover that one gold block is not covered with water, we can reject the assignment, thus if we get to the last entry of the tape without rejecting, we can accept the assignment. Therefore, our verifier is complete and sound. Moreover, our verifier runs also in polynomial runtime, because updating for one tick takes $n^{2}$,there are at most $n^{3}$ ticks and accepting and rejecting runs in $n^{2}$ as previously determined. This results in a total worst-case runtime for the verifier of $n^5 + n^2 = O(n^5)$.
 	\newline\newline Now we have found a short certificate and a verifying Turing Machine, thus proving that our language is a member of NP. Finding an given assignment is much harder than verifying it, but is definitely solvable by brute-forcing in exponential time, hence part of EXP.
