@@ -1,40 +1,24 @@
-\section{The Minecraft Water Problem}
+\section{The \textit{Minecraft} Water Problem}
+
 % put an intro here
 \noindent Our problem uses the popular game \textit{Minecraft} and its properties as its base. In \textit{Minecraft}, the player can generate a "random" world, in which he can then place and break blocks at will. For the \textit{Minecraft Water Problem} we took an abstract version of \textit{Minecraft}, using the natural mechanics of the game and setting certain rules for world generation and updates of the world (Ticks). In the further sections of this paper, we will discuss the required rules to make our problem possible and a detailed description of why this problem is NP-Complete.
 
 \subsection{The World} 
 
-\noindent As already said in the introduction for this problem, we use a special \textit{Minecraft} world which we will call \textbf{MCWATER}. A \textit{Minecraft} world in the format of \textbf{MCWATER} needs to follow certain rules:
+\noindent A \textit{Minecraft} world is an arrangement of blocks, which each have three coordinates to refer to their position and a block name to specify the properties of the block. For our specification, the \textit{Minecraft} world is seen as a 3D-Array, where every field has the block from this position in the world or contains nothing (in \textit{Minecraft} this would be the air block). 
+
+\noindent For our problem we check if a certain \textit{Minecraft} world meets the criteria of \textbf{MCWATER}. The world needs to satisfy the following rules: 
 
 \begin{itemize}
     \item It can only contain certain blocks (specified in section \ref{blocks})
     \item The player may not change anything in the world
-    \item Special rules for interaction of blocks (specified in section \ref{rules}
+    \item Special rules for interaction of blocks (specified in section \ref{blocks})
 \end{itemize}
 
-\subsection{Rules for updating blocks} \label{rules}
-\noindent The interactions of the blocks used in our world are defined as follows:
-
-\begin{itemize}
-    \item If a block wants to replace water, it will always do so
-    \item When water wants to replace a tripwire, it will always do so
-    \item If two water blocks meet, the one with the higher water level will win \textit{(Water level describes the "strength" of flowing water from its source block. The water level will decrease by one for each block that it has flown away from its source)}
-    \item If two flowing waters at the highest water level meet, they will form a solid water block.
-\end{itemize}
-
-\subsection{Block Updates} \label{blockupdates}
-\noindent A Minecraft world is updated in "ticks". The dynamics behind these ticks and which blocks are affected are complicated which is why we will not dive deeper into this subject. For our abstraction we reduce the tick logic to \textit{1 Tick = 1 Water-Update}. There will be a deeper explanation about the updating of blocks in section \ref{updating} \textit{Updating the World}, but we will go over the basics.
-
-\noindent When updating the world and its blocks, we use the following method (while considering the rules for updating blocks \ref{rules}):
-
-\noindent Firstly, we go through every block and ask them how they want to change their environment. If more than one block wants to change a certain block, we will check the rules and change that block accordingly. 
-
-\noindent It is also important to note that the number of blocks that are taken into account in each update is always constant.
-
-\pagebreak
-\subsection{Allowed Blocks in MCWATER} \label{blocks}
+\subsection{Allowed Blocks in \textbf{MCWATER}} \label{blocks}
 
 \noindent For our definition of the \textit{Minecraft Water Problem}, we limit the usage of blocks/objects that we can place in our world to the following 7:
+\newline \textit{(Every block except string, sand and water can be replaced by almost every "normal" building block from the game, since they serve no functionality. We simply chose these blocks for color differentiation!)}
 \paragraph{Wool\cite{minecraftfandom:wool}}
 Wool is a block that can be obtained from sheep in the game.
 They can be colored in 16 different colors with the corresponding dye.
@@ -62,7 +46,7 @@ They mark the position of the water source that represents the variables.
 
 \paragraph{String/Tripwire\cite{minecraftfandom:string}}
 A piece of string can be obtained by defeating a spider in the game.
-They can be placed on top of blocks and interact with objects and are now called a tripwire.
+They can be placed on top of blocks or in the air and interact with objects and are now called a tripwire.
 The property most relevant to our problem is that if a tripwire is below a block that could fall due to gravity, the block will not fall.
 We will use this to prevent a sand block from falling.
 Tripwires will be destroyed if water is flowing to the same coordinate.
@@ -71,20 +55,40 @@ Tripwires will be destroyed if water is flowing to the same coordinate.
 Sand is a block that is generated near water or in a desert biome.
 It is one of the few blocks in \textit{Minecraft} that is influenced by gravity.
 \marginpar{\tiny If there are no blocks at all below sand, then we assume it just gets deleted from the world.}{If} there is no solid block or string below the sand, it will fall until it cannot go any further.
-We use this property to prevent water from flowing into an unwanted channel. In the game, there is some delay between falling and being placed again, but for the definition of our problem, we assume that if a block is falling, it immediately falls to the maximum position it can fall during a block update. 
+We use this property to prevent water from flowing into an unwanted channel. In the game, there is some delay between falling and being placed again, but for the definition of our problem, we say the sand will fall one step every tick.
 
 \noindent \newline For example, if a string is below a sand block, it will not fall, but if the string is destroyed, the sand will take its place by falling one block below.
 
-\pagebreak
 \paragraph{Water}
 Water naturally generates in the world to form oceans, rivers, and springs\cite{minecraftfandom:water}. 
 It mimics the properties of water(as a fluid) in the real world.
+We differentiate water into two types, the source block and flowing water, which can have 7 different water levels that will be explained in \ref{waterflow}. 
 If there are no air blocks (or simply empty blocks) in the adjacent tiles,
 the water stands still. Otherwise the water spreads according to a specific flow logic.
 
-\paragraph{Flow behavior of water}
-Water spreads horizontally and downward into nearby air \marginpar{\tiny When water flows infinitely out of the world, we can assume it disappears because it does not change the outcome of the problem.}{blocks}. Water can spread downward infinitely until stopped by a block, and 7 blocks horizontally from a source block on a flat surface. \newline Water spreads at a rate of 1 block every 5 game ticks, or 4 blocks per second \cite{minecraftfandom:waterspread}.\newline
-\newline This definition refers to the actual in-game tick system, however we use our own abstraction described in section \ref{blockupdates}.
+\paragraph{Flow behavior of water} \label{waterflow}
+Water spreads horizontally and downward into nearby air. When a water block is placed, it always checks the surrounding 5 by 5 area for air blocks one level below the water, so it can flow there directly. If an air block is found, the water will spread directly into this air block, if not the water will continue its natural flow in each possible horizontal direction for 7 blocks. Every time the water spreads one block in a direction it performs the before mentioned 5 by 5 scan for holes to flow into. The maximum a single water block can spread is shown in Figure \ref{fig:normalflow}.
+
+\begin{figure}[ht]
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{images/waterflownoair.png}
+    \caption{Normal water flow}
+    \label{fig:normalflow}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{images/waterflowhole.png}
+    \caption{Water flowing to hole}
+    \label{fig:holeflow}
+  \end{minipage}
+\end{figure}
+\pagebreak
+
+
+\marginpar{\tiny When water flows infinitely out of the world, we can assume it disappears because it does not change the outcome of the problem.} \noindent Water can spread downward infinitely until stopped by a block. Water spreads at a rate of 1 block every 5 game ticks, or 4 blocks per second \cite{minecraftfandom:waterspread}.
+
+\noindent This definition refers to the actual in-game tick system, however we use our own abstraction described in section \ref{blockupdates}.
 Therefore we summarize 5 game ticks to a single block update.
 \newline If there is a need to extend the water flow, we can move the flow one layer (or block) below in the 7 block range from the source block.
 The value that is used to determine the current flow is reset and we have another 7 blocks to work with that can also be extended as needed.
@@ -97,9 +101,28 @@ The value that is used to determine the current flow is reset and we have anothe
     \label{fig:allowedblocks}
 \end{figure}
 
+
+\vspace{2cm}
+
+\subsection{Block Updates} \label{blockupdates}
+\noindent In \textit{Minecraft}, the "chunks" (chunk = 16 by 16 area of the world) that are currently loaded in the memory are updated in "ticks". The dynamics behind these ticks and which blocks are affected are complicated, which is why we will not dive deeper into this subject. For our problem we say that every chunk is always loaded, otherwise parts of the world could not receive block updates. There will be a deeper explanation about the updating of blocks in section \ref{updating} \textit{Updating the World}, but we will go over the basics. 
+
+\noindent Firstly, we need to set rules which will help in the following explanation:
+
+\begin{itemize}
+    \item If a block wants to replace water, it will always do so
+    \item When water wants to replace a tripwire, it will always do so
+    \item If two water blocks meet, the one with the higher water level will win \textit{(Water level is described in \ref{waterflow})}
+    \item If two flowing waters at the highest water level meet, they will form a solid water block.
+\end{itemize}
+
+\noindent When performing a block update, we go through every block and ask them how they want to change their environment. When a block wants to make changes to another block it will overwrite that block as an "update block" which shows that this block has been updated in the current tick and does not need to be updated in this tick. If another block wants to change an already updated block, we will check the rules and change that block accordingly. 
+
+\noindent It is also important to note that the number of blocks that are taken into account in each update is always constant.
+
 \subsection{Definition}
 
 Now that the cornerstones of our problem are defined we can give a formal definition of our Language \textit{WATERGOLD}:
 
-\noindent A \textbf{MCWATER} world is part of \textit{WATERGOLD} if there exists a subset of Lapis Lazuli Blocks, so that every gold block is covered by water if we place a water block on every Lapis Lazuli Block of this subset at the same time. For this check, we will update the \textbf{MCWATER} world until no changes are made anymore.
+\noindent A \textbf{MCWATER} world is part of \textit{WATERGOLD} if there exists a subset of lapis lazuli Blocks, so that every gold block is covered by water if we place a water block on every lapis lazuli Block of this subset at the same time. For this check, we will update the \textbf{MCWATER} world until no changes are made anymore.
 

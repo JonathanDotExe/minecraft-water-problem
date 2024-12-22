@@ -1,7 +1,7 @@
-\section{NP completeness of the Minecraft Water Problem}
+\section{NP completeness of the \textit{Minecraft} Water Problem}
 
 
-\subsection{SAT $\leq_p$ MCWATER}
+\subsection{\textbf{SAT} $\leq_p$ \textbf{MCWATER}}
 To encode a \textbf{SAT} formula $F$ in CNF with $n$ variables and $m$ clauses into an \textbf{MCWATER} world $W$, we define the following structures as "building blocks" of our world:
 
 
@@ -99,12 +99,12 @@ The relation $x \in$ \textbf{SAT} if and only if $f(x) \in$ \textbf{MCWATER} is 
 
 
 
-\subsection{3-SAT $\leq_p$ SAT}
+\subsection{\textbf{SAT} $\leq_p$ SAT}
 To also show the reduction from \textbf{3-SAT}, we will use the intermediate reduction to \textbf{SAT}, the language of satisfiable boolean formulas in CNF.\newline This relation is immediately obvious, as \textbf{3-SAT} $\subset$ \textbf{SAT}.\newline For the Karp reduction we have $f(x) = x$ and $x \in$ \textbf{3-SAT} if and only if $f(x) \in$ \textbf{SAT}.
 
 
 
-\subsection{3-SAT $\leq_p$ MCWATER}
+\subsection{\textbf{3-SAT} $\leq_p$ \textbf{MCWATER}}
 Due to the transitivity of Karp reductions, we can combine the previous reductions\newline \textbf{3-SAT} $\leq_p$ \textbf{SAT} and \textbf{SAT} $\leq_p$ \textbf{MCWATER} to conclude \textbf{3-SAT} $\leq_p$ \textbf{MCWATER}.
 
 
