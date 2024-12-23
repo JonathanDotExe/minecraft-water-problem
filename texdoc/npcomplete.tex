@@ -31,7 +31,7 @@ Splitters represent literals in a clause and always belong to  exactly one claus
 \pagebreak
     
 \paragraph{Collector} \label{collector}
-Collectors represents clauses of the CNF formulas are placed under Splitters to catch the falling streams. They are placed sequentially after each other, each time replacing the gold block at the end and effectively making sure, that it is always at the end of the chain. Like the splitters, they provide a constant down-hill to extend the streams. They also combine the outputs of the splitters and therefore act as an OR gate. The gold at the end will be covered in water if and only if one or more of the splitters output water onto the Collector chain. In boolean terms, the paths represent clauses of literals and the gold blocks at the end together with the \textbf{MCWATER} definition represent a conjunction of clauses.\newline A Collector has a width of 6, a height of 2 and a length 3 blocks.
+Collectors represent clauses of the CNF formulas are placed under Splitters to catch the falling streams. They are placed sequentially after each other, each time replacing the gold block at the end and effectively making sure, that it is always at the end of the chain. Like the splitters, they provide a constant down-hill to extend the streams. They also combine the outputs of the splitters and therefore act as an OR gate. The gold at the end will be covered in water if and only if one or more of the splitters output water onto the Collector chain. In boolean terms, the paths represent clauses of literals and the gold blocks at the end together with the \textbf{MCWATER} definition represent a conjunction of clauses.\newline A Collector has a width of 6, a height of 2 and a length 3 blocks.
 
 \begin{figure}[h]
     \centering
@@ -99,7 +99,7 @@ The relation $x \in$ \textbf{SAT} if and only if $f(x) \in$ \textbf{MCWATER} is 
 
 
 
-\subsection{\textbf{SAT} $\leq_p$ SAT}
+\subsection{\textbf{3-SAT} $\leq_p$ SAT}
 To also show the reduction from \textbf{3-SAT}, we will use the intermediate reduction to \textbf{SAT}, the language of satisfiable boolean formulas in CNF.\newline This relation is immediately obvious, as \textbf{3-SAT} $\subset$ \textbf{SAT}.\newline For the Karp reduction we have $f(x) = x$ and $x \in$ \textbf{3-SAT} if and only if $f(x) \in$ \textbf{SAT}.
 
 
@@ -110,7 +110,7 @@ Due to the transitivity of Karp reductions, we can combine the previous reductio
 
 
 \subsection{NP-hard and NP-complete}
-As shown, an arbitrary formula in \textbf{3-SAT} can be converted to a world in \textbf{MCWATER} in polynomial time and space. This proves that \textbf{MCWATER} is NP-hard.\newline Given that we have found NP-hard \textbf{MCWATER}, we might even consider it \textbf{MCICE}\footnote{This is a joke}.
+As shown, an arbitrary formula in \textbf{3-SAT} can be converted to a world in \textbf{MCWATER} in polynomial time and space. This proves that \textbf{MCWATER} is NP-hard.\newline Given that we have found NP-hard \textbf{MCWATER}, we might even consider it \textbf{MCICE}\footnote{This is a joke.}.
 \linebreak
 \noindent Together with the finding that \textbf{MCWATER} is in NP, we have proven that \textbf{MCWATER} is NP-complete.
 
